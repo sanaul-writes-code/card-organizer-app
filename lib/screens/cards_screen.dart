@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/card.dart';
 import '../repositories/card_repository.dart';
+import 'edit_card_screen.dart';
 
 class CardsScreen extends StatefulWidget {
   final int folderId;
@@ -49,6 +50,15 @@ class _CardsScreenState extends State<CardsScreen> {
             trailing: const Icon(Icons.arrow_forward),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EditCardScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
