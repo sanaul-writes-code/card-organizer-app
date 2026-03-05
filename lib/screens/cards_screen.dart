@@ -48,6 +48,18 @@ class _CardsScreenState extends State<CardsScreen> {
             title: Text(card.cardName),
             subtitle: Text(card.suit),
             trailing: const Icon(Icons.arrow_forward),
+            onTap: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditCardScreen(folderId: widget.folderId, card: card),
+                ),
+              );
+              if (result == true) {
+                loadCards();
+              }
+            },
             onLongPress: () async {
               await repository.deleteCard(card.id!);
               loadCards();
