@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/folder.dart';
 import '../repositories/folder_repository.dart';
+import 'cards_screen.dart';
 
 class FoldersScreen extends StatefulWidget {
   const FoldersScreen({super.key});
@@ -61,10 +62,18 @@ class _FoldersScreenState extends State<FoldersScreen> {
 
           return ListTile(
             title: Text(folder.folderName),
-            subtitle: Text("Created: older.timestamp}"),
+            subtitle: Text("Created: ${folder.timestamp}"),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
-              // next screen later
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CardsScreen(
+                    folderId: folder.id!,
+                    folderName: folder.folderName,
+                  ),
+                ),
+              );
             },
           );
         },
