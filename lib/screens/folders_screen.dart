@@ -16,7 +16,30 @@ class _FoldersScreenState extends State<FoldersScreen> {
   @override
   void initState() {
     super.initState();
-    loadFolders();
+    initializeFolders();
+  }
+
+  Future initializeFolders() async {
+    await createDefaultFolders();
+    await loadFolders();
+  }
+
+  Future createDefaultFolders() async {
+    final existing = await repository.getFolders();
+    if (existing.isEmpty) {
+      await repository.createFolder(
+        Folder(folderName: "Hearts", timestamp: DateTime.now().toString()),
+      );
+      await repository.createFolder(
+        Folder(folderName: "Spades", timestamp: DateTime.now().toString()),
+      );
+      await repository.createFolder(
+        Folder(folderName: "Diamonds", timestamp: DateTime.now().toString()),
+      );
+      await repository.createFolder(
+        Folder(folderName: "Clubs", timestamp: DateTime.now().toString()),
+      );
+    }
   }
 
   Future loadFolders() async {
