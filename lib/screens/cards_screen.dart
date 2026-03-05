@@ -48,6 +48,10 @@ class _CardsScreenState extends State<CardsScreen> {
             title: Text(card.cardName),
             subtitle: Text(card.suit),
             trailing: const Icon(Icons.arrow_forward),
+            onLongPress: () async {
+              await repository.deleteCard(card.id!);
+              loadCards();
+            },
           );
         },
       ),
