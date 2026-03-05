@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../models/card.dart';
+import '../repositories/card_repository.dart';
 
 class EditCardScreen extends StatefulWidget {
-  const EditCardScreen({super.key});
+  final int folderId;
+  const EditCardScreen({super.key, required this.folderId});
 
   @override
   State<EditCardScreen> createState() => _EditCardScreenState();
@@ -10,6 +13,7 @@ class EditCardScreen extends StatefulWidget {
 class _EditCardScreenState extends State<EditCardScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
+  final CardRepository repository = CardRepository();
 
   String suit = "Hearts";
 
@@ -55,8 +59,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
             const SizedBox(height: 30),
 
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                final card = CardModel(
+                  cardName: nameController.text,
+                  suit: suit,
+                  imageUrl: imageController.text,
+                  folderId: widget.folderId,
+                );
+                await repository.createCard(card);
+                Navigator.pop(context, true);
               },
               child: const Text("Save"),
             ),

@@ -52,11 +52,16 @@ class _CardsScreenState extends State<CardsScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const EditCardScreen()),
+            MaterialPageRoute(
+              builder: (context) => EditCardScreen(folderId: widget.folderId),
+            ),
           );
+          if (result == true) {
+            loadCards();
+          }
         },
         child: const Icon(Icons.add),
       ),
