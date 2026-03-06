@@ -1,57 +1,25 @@
 # Card Organizer App
+A lightweight Card Organizer Flutter app that groups study or reference cards into folders, supports card images, and persists data locally. The repository’s lib folder contains the app entry point and the core layers: database helper, data models, repository layer for folders and cards, and UI screens (folders list, card list/detail, add/edit flows).
 
-Welcome to the project! To maintain a stable `main` branch, we use a **branch-and-merge workflow**. Please follow the steps below for all changes.
+## Key features
 
----
+- Folder CRUD — create, read, update, delete folders.
+- Card CRUD — create, read, update, delete cards within folders.
+- Image support — cards can include images (assets or remote URIs).
+- Local persistence — SQLite database with repository abstraction.
+- Simple navigation — folder list → card list → card detail → add/edit.
 
-# 🚀 Development Workflow
+## Architecture and design
+- Layered structure — UI screens call into repository classes that encapsulate SQL operations; a database helper initializes the SQLite database and handles migrations.
 
-## 1. Sync with Main
+- Data model — two primary entities: Folder and Card; cards reference folders via a foreign key and are removed when their parent folder is deleted (cascade behavior is implemented at the DB layer).
 
-Before starting any new work, ensure your local `main` branch has the latest updates.
+- Separation of concerns — UI widgets remain thin and delegate persistence to repository classes so logic is testable and easier to maintain. The lib folder contains these layers.
 
-```bash
-git checkout main
-git pull origin main
-```
+## File structure (lib) — high level
 
-## 2. Create a Feature Branch
-
-Do not push directly to main. Always create a new branch for your task.
-
-```git checkout -b branch_name```
-
-## 3. Commit and Push
-
-Work on your changes, commit them, and push your branch to GitHub.
-
-```
-git add .
-git commit -m "Description of your changes"
-git push origin branch_name
-```
-
-## 4. Create a Pull Request (PR)
-
-Go to the repository on GitHub.
-
-Click the "Compare & pull request" button that appears.
-
-Provide a clear title and description.
-
-Self-Approval:
-For now, you are permitted to approve and merge your own PRs to keep the workflow moving.
-
-5. Cleanup
-
-Once your PR is merged, delete your feature branch to keep the repository clean.
-
-`git branch -d branch_name`
-
-## 6. Workflow Rules
-
-No Direct Pushes: The main branch is protected. All code must enter via a Pull Request.
-
-Branch First: Always run git checkout -b before writing code.
-
-Update Frequently: Always pull from main before starting a new branch to avoid merge conflicts.
+- main.dart — app entry point and route setup.
+- Database helper — initializes DB, enables foreign keys, and runs migrations.
+- Models — Folder and Card data classes.
+- Repositories — folder and card repositories that expose CRUD methods.
+- Screens / Widgets — folder list screen, card list screen, card detail screen, add/edit forms, and any grid/list UI components.
