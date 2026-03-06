@@ -40,6 +40,9 @@ class _FoldersScreenState extends State<FoldersScreen> {
       await repository.createFolder(
         Folder(folderName: "Clubs", timestamp: DateTime.now().toString()),
       );
+      await repository.createFolder(
+        Folder(folderName: "Jokers", timestamp: DateTime.now().toString()),
+      );
     }
   }
 
@@ -54,7 +57,19 @@ class _FoldersScreenState extends State<FoldersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Card Folders")),
+      appBar: AppBar(
+        title: const Text(
+          "Card Folders",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontSize: 26,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 2,
+        iconTheme: const IconThemeData(color: Colors.red),
+      ),
       body: ListView.builder(
         itemCount: folders.length,
         itemBuilder: (context, index) {

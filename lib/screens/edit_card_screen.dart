@@ -36,10 +36,32 @@ class _EditCardScreenState extends State<EditCardScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: "Card Name"),
-            ),
+            suit == "Jokers"
+                ? DropdownButtonFormField<String>(
+                    value: nameController.text.isNotEmpty
+                        ? nameController.text
+                        : "black_joker",
+                    items: const [
+                      DropdownMenuItem(
+                        value: "black_joker",
+                        child: Text("Black Joker"),
+                      ),
+                      DropdownMenuItem(
+                        value: "red_joker",
+                        child: Text("Red Joker"),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        nameController.text = value!;
+                      });
+                    },
+                    decoration: const InputDecoration(labelText: "Card Name"),
+                  )
+                : TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: "Card Name"),
+                  ),
 
             const SizedBox(height: 20),
 
@@ -50,6 +72,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                 DropdownMenuItem(value: "Spades", child: Text("Spades")),
                 DropdownMenuItem(value: "Diamonds", child: Text("Diamonds")),
                 DropdownMenuItem(value: "Clubs", child: Text("Clubs")),
+                DropdownMenuItem(value: "Jokers", child: Text("Jokers")),
               ],
               onChanged: (value) {
                 setState(() {

@@ -39,15 +39,19 @@ class _CardsScreenState extends State<CardsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.folderName)),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(12),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 0.7,
+        ),
         itemCount: cards.length,
         itemBuilder: (context, index) {
           final card = cards[index];
 
-          return ListTile(
-            title: Text(card.cardName),
-            subtitle: Text(card.suit),
-            trailing: const Icon(Icons.arrow_forward),
+          return GestureDetector(
             onTap: () async {
               final result = await Navigator.push(
                 context,
@@ -61,9 +65,78 @@ class _CardsScreenState extends State<CardsScreen> {
               }
             },
             onLongPress: () async {
-              await repository.deleteCard(card.id!);
-              loadCards();
+              final confirm = await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Delete Card"),
+                  content: const Text(
+                    "Are you sure you want to delete this card?",
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: const Text("Cancel"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text("Delete"),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true) {
+                await repository.deleteCard(card.id!);
+                loadCards();
+              }
             },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                          (card.suit.toLowerCase() == "jokers" ||
+                              card.suit.toLowerCase() == "joker")
+                          ? Image.asset(
+                              "assets/images/${card.cardName.toLowerCase()}.png",
+                              width: 100,
+                              height: 140,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.style, size: 60),
+                            )
+                          : Image.asset(
+                              "assets/images/${card.cardName.toLowerCase()}_of_${card.suit.toLowerCase()}.png",
+                              width: 100,
+                              height: 140,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.style, size: 60),
+                            ),
+                    ),
+                  ),
+                  Text(
+                    card.cardName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(card.suit),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
           );
         },
       ),
